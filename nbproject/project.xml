@@ -3,7 +3,7 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>I2Ctest</name>
+            <name>pic18f47q10_lm35b_i2c_mcc</name>
             <creation-uuid>a0a8358e-c0a7-45f0-b9e3-0a5835bd0c4b</creation-uuid>
             <make-project-type>0</make-project-type>
             <sourceEncoding>Shift_JIS</sourceEncoding>

@@ -1,10 +1,25 @@
+/**
+ * main.c   of  pic18f47q10_lm35b_i2c_mcc.X
+ * 
+ * temperature sensor using lm35b
+ * 
+ * I2C_host using MCC-melody
+ * 
+ * All files included in this project is test-only.
+ * No warranties.
+ * Wrote: y.minato
+ * 2024/12/22
+ */
+
 #include "mcc_generated_files/system/system.h"
 
-#define LM75B_address 0x48          // A0=A1=A2=Low
-#define temp_reg      0x00          //Temperture register
-#define conf_reg      0x01          //Configuration register
-#define thyst_reg     0x02          //Hysterisis register
-#define tos_reg       0x03          //Overtemperature shutdown register
+#define NOPRINTF (0)
+
+#define LM75B_address (0x48)          // A0=A1=A2=Low
+#define temp_reg      (0x00)          //Temperture register
+#define conf_reg      (0x01)          //Configuration register
+#define thyst_reg     (0x02)          //Hysterisis register
+#define tos_reg       (0x03)          //Overtemperature shutdown register
 
 const double tos = 30.0;                  //割り込み発生温度（高） 0.5℃刻み  デフォルトでは80℃
 const double thyst = 28.0;                //割り込み発生温度（低） 0.5℃刻み　デフォルトでは75℃
@@ -14,7 +29,7 @@ const uint8_t osPin = 2;                  //LM75BのOSピンと接続するピン
 
 const i2c_host_interface_t *I2C = &I2C1_Host;
 
-#define BUFMAX 128
+#define BUFMAX (128)
 uint8_t sendBuf[BUFMAX];
 uint8_t dataRead[BUFMAX];
 
@@ -23,7 +38,10 @@ static bool gb_didProceedData = false;
 
 void initLM75B(void)
 {
+    #if NOPRINTF != 1
     printf(" ---- initLM75B start ---- \n");
+    #endif
+    
     //tosの温度設定    
     sendBuf[0] = tos_reg;
     sendBuf[1] = tos_data >> 8;
@@ -31,7 +49,10 @@ void initLM75B(void)
     I2C->Write(LM75B_address, sendBuf, 3);
     while(I2C->IsBusy())
     {
+        #if NOPRINTF != 1
         printf("I2C busy, Do task!\n");
+        #endif
+
         I2C->Tasks();
     }
     //thystの温度設定
@@ -41,7 +62,9 @@ void initLM75B(void)
     I2C->Write(LM75B_address, sendBuf, 3);
     while(I2C->IsBusy())
     {
+        #if NOPRINTF != 1
         printf("I2C busy, Do task!\n");
+        #endif
         I2C->Tasks();
     }
     
@@ -50,11 +73,12 @@ void initLM75B(void)
     I2C->Write(LM75B_address, sendBuf, 1);
     while(I2C->IsBusy())
     {
+        #if NOPRINTF != 1
         printf("I2C busy, Do task!\n");
+        #endif
         I2C->Tasks();
     }
 }
-#define NOPRINTF (1)
 
 int main(void)
 {
